@@ -1,6 +1,60 @@
 # MedicalVLM-matching
+## About this repository
+This repository is supplementally results of our poster presentation at IFMIA2025, “Do medical VLMs discover discriminative features in multi-modal medical images?".
+Corresponding poster is [available](./IF250081.pdf)!
+![](./fig/experimental_schema.png)
 
-## Survey results for paper named "Do medical VLMs discover discriminative features in multi-modal medical images?"
+## Abstract
+This study investigates the feature representations produced by publicly available open source medical vision-language models (VLMs). VLMs are deep learning models trained on large scale datasets to embed images and texts into their respective universal feature spaces. Medical VLMs have been developed to capture sophisticated feature representations, but their learned feature representations remain underexplored. Understanding these representations is crucial for revealing medical image structures and improving downstream tasks in medical image analysis.
+
+This study aims to investigate the feature distributions learned by medical VLMs and evaluate the impact of medical specialization. We analyze the feature distribution of multiple image modalities extracted by some representative medical VLMs across lesion classification datasets on multiple modalities. These distributions were compared them with non-medical VLMs to assess the domain-specific medical training. Our experiments showed that medical VLMs can extract discriminative features that are effective for medical classification tasks. Moreover, it was found that non-medical VLMs with recent improvement with contextual enrichment such as LLM2CLIP produce more refined feature representations.
+
+Our results imply that enhancing text encoder is more crucial than training intensively on medical images when developing medical VLMs. Notably, non-medical models are particularly vulnerable to biases introduced by overlaied text strings on images. These findings underscore the need for careful consideration on model selection according to downstream tasks besides potential risks in inference due to background biases such as textual information in images.
+
+### Findings via Observation
+#### The VLMs are aware of the tumor and its malignancy!
+TBW
+
+#### Background biases affected the feature distributions!
+TBW
+
+#### Medical specialization doesn’t specialize image encoders
+TBW
+
+#### The VLMs are discriminative on tumor subtypes.
+TBW
+
+#### Negative effect of pre-training on PMC-15M
+TBW
+
+### Evaluation by SVM Classifiers
+model name | Backbone | [Brain MR](https://www.kaggle.com/datasets/sartajbhuvaji/brain-tumor-classification-mri) <br> $n=2,870$ | <br>$2$ classes  | [SARS-COV-2 CTscan](https://www.kaggle.com/datasets/plameneduardo/sarscov2-ctscan-dataset) <br> $n=2,481$ | <br> $2$ classes | [PneumoniaMNIST](https://medmnist.com/) <br>$n=4,708$ | <br> $2$ classes| [BreastUS](https://www.kaggle.com/datasets/aryashah2k/breast-ultrasound-images-dataset)<br> $n=780$|<br>$3$ classes| [BreakHis](https://web.inf.ufpr.br/vri/databases/breast-cancer-histopathological-database-breakhis/)<br> $n=7,909$|<br>$2$ classes| [HiCervix](https://github.com/Scu-sen/HiCervix)<br> $n=28,160$|<br>$29$ classes| [DeepDRiD](https://github.com/deepdrdoc/DeepDRiD)<br> $n=1,200$|<br>$5$ classes| [ISIC2019](https://challenge.isic-archive.com/landing/2019/)<br> $n=25,331$|<br>$9$ classes|
+| :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: |
+|  |  | Accuracy | F1-score | Accuracy | F1-score | Accuracy | F1-score | Accuracy | F1-score | Accuracy | F1-score | Accuracy | F1-score | Accuracy | F1-score | Accuracy | F1-score |
+**Medical VLMs**|
+[BiomedCLIP](https://arxiv.org/abs/2303.00915) | [B-16](https://huggingface.co/microsoft/BiomedCLIP-PubMedBERT_256-vit_base_patch16_224) | $91\pm 0.2\%^\dagger$ | $91\pm 0.2\%^\dagger$ | $89\pm 0.5\%^\dagger$ |  $89\pm 0.5\%^\dagger$ | $97\pm 0.4\%^\dagger$ | **$97\pm 0.5\%^\dagger$** | $91\pm 0.2\%^\dagger$ | $91\pm 0.2\%^\dagger$ | $83\pm 0.8\%^\dagger$ | $87\pm 0.7\%^\dagger$ | $49\pm 0.2\%^\dagger$ | $41\pm 0.2\%^\dagger$ | $63\pm 0.6\%^{u}$ | $42\pm 3.9\%^{u}$ | $68\pm 0.1\%^\dagger$ | $38\pm 0.2\%^\dagger$ |
+[LLaVA-Med](https://arxiv.org/abs/2306.00890) | [L/14-336](https://huggingface.co/microsoft/llava-med-v1.5-mistral-7b) | $93\pm 0.4\%^\dagger$ | $94\pm 0.4\%^\dagger$ | $95\pm 0.5\%^\dagger$ | $95\pm 0.5\%^\dagger$ | $96\pm 0.3\%^\dagger$ | $95\pm 0.4\%^\dagger$ | $93\pm 0.4\%^\dagger$ | $94\pm 0.4\%^\dagger$ | $86\pm 0.9\%^\dagger$ | $89\pm 0.8\%^\dagger$ | $61\pm 0.2\%^\dagger$ | $57\pm 0.5\%^\dagger$ | $67\pm 1.1\%^{u}$ | $49\pm 0.8\%^{u}$ | **$77\pm 0.2\%^\dagger$** | **$64\pm 1.1\%^\dagger$** |
+[LLaVA-Med++](https://arxiv.org/abs/2408.02900) | [L/14-336](https://github.com/UCSC-VLAA/MedTrinity-25M) | $93\pm 0.4\%^\dagger$ | $94\pm 0.5\%^\dagger$ | $94\pm 0.1\%^\dagger$ | $94\pm 0.1\%^\dagger$ | $96\pm 0.5\%^\dagger$ | $95\pm 0.6\%^\dagger$ | $93\pm 0.4\%^\dagger$ | $94\pm 0.5\%^\dagger$ | $86\pm 1.3\%^\dagger$ | $89\pm 1.2\%^\dagger$ | $62\pm 0.4\%^\dagger$ | $57\pm 0.5\%^\dagger$ | $68\pm 1.6\%^{u}$ | $51\pm 2.4\%^{u}$ | **$77\pm 0.2\%^\dagger$** | $63\pm 1.0\%^\dagger$ |
+|**Modality-specific VLMs**|
+[CXR-CLIP](https://link.springer.com/chapter/10.1007/978-3-031-43895-0_10) | [SwinT](https://github.com/Soombit-ai/cxr-clip) | $86\pm 0.4\%$ | $86\pm 0.5\%$ | $79\pm 0.6\%$ | $79\pm 0.6\%$ | $93\pm 0.6\%$ | $90\pm 0.7\%$ | $86\pm 0.4\%$ | $86\pm 0.5\%$ | $80\pm 0.9\%$ | $85\pm 0.5\%$ | $45\pm 0.1\%$ | $37\pm 0.1\%$ | $61\pm 1.9\%$ | $34\pm 4.0\%$ | $60\pm 0.1\%$ | $25\pm 0.3\%$ |
+[CONCH](https://www.nature.com/articles/s41591-024-02856-4) | [ViT (CoCa)](https://github.com/mahmoodlab/CONCH) | $91\pm 0.9\%$ | $91\pm 0.9\%$ | $88\pm 0.5\%$ | $88\pm 0.5\%$ | $95\pm 0.2\%$ | $94\pm 0.3\%$ | $91\pm 0.9\%$ | $91\pm 0.9\%$ | $89\pm 0.4\%^\dagger$ | $91\pm 0.3\%^\dagger$ | $57\pm 0.3\%$ | $51\pm 0.4\%$ | $64\pm 1.9\%$ | $45\pm 2.9\%$ | $71\pm 0.2\%$ | $44\pm 0.3\%$ |
+[UNI](https://www.nature.com/articles/s41591-024-02857-3) | [B/16](https://github.com/mahmoodlab/UNI) | $93\pm 0.3\%$ | $93\pm 0.3\%$ | $93\pm 0.4\%$ | $93\pm 0.4\%$| $97\pm 0.2\%$ | $96\pm 0.2\%$ | $93\pm 0.3\%$ | $93\pm 0.3\%$ | **$91\pm 0.8\%^\dagger$** | **$93\pm 0.6\%^\dagger$** | **$65\pm 0.2\%$** | **$62\pm 0.2\%$** | $69\pm 1.0\%$ | $49\pm 2.1\%$ | $74\pm 0.3\%$ | $57\pm 0.6\%$|
+[FLAIR](https://arxiv.org/abs/2308.07898) | [ResNet50](https://github.com/jusiro/FLAIR) | $84\pm 0.4\%$ | $84\pm 0.3\%$ | **$96\pm 0.4\%$** | **$96\pm 0.4\%$** | $98\pm 0.2\%$ | $97\pm 0.2\%$ | $76\pm 1.1\%$ | $70\pm 1.6\%$| $82\pm 0.9\%$ | $87\pm 0.5\%$ |  $44\pm 0.2\%$ | $35\pm 0.1\%$ | $70\pm 0.8\%$ | **$59\pm 2.0\%$** | $62\pm 0.1\%$ | $25\pm 0.4\%$|
+**non-medical VLMs** | 
+[CLIP](https://arxiv.org/abs/2103.00020) | [B/16](https://github.com/mlfoundations/open_clip) | $92\pm 0.7\%$ | $92\pm 0.7\%$ | $92\pm 0.4\%$ | $92\pm 0.4\%$| $97\pm 0.4\%$ | $96\pm 0.5\%$ | $92\pm 0.7\%$ | $92\pm 0.7\%$ | $84\pm 1.0\%$ | $88\pm 0.7\%$ | $57\pm 0.3\%$ | $52\pm 0.4\%$ | $61\pm 1.3\%$ | $34\pm 2.7\%$ | $71\pm 0.2\%$ | $45\pm 0.4\%$ |
+|| [L/14](https://github.com/mlfoundations/open_clip) | $91\pm 0.6\%$ | $92\pm 0.6\%$ | $89\pm 0.8\%$ | $89\pm 0.8\%$| $97\pm 0.1\%$ | $96\pm 0.1\%$ | $91\pm 0.6\%$ | $92\pm 0.6\%$ | $86\pm 0.6\%$ | $89\pm 0.5\%$ | $59\pm 0.2\%$ | $54\pm 0.3\%$ | $66\pm 0.9\%$ | $46\pm 2.1\%$ | $73\pm 0.1\%$ | $53\pm 0.9\%$ |
+|| [G/14](https://github.com/mlfoundations/open_clip) | $90\pm 0.7\%$ | $90\pm 0.7\%$ | $93\pm 0.5\%$ | $93\pm 0.5\%$| $97\pm 0.3\%$ | $96\pm 0.4\%$ | $90\pm 0.7\%$ | $90\pm 0.7\%$ | $86\pm 0.9\%$ | $89\pm 0.8\%$ | $59\pm 0.2\%$ | $53\pm 0.3\%$ | $63\pm 1.2\%$ | $41\pm 2.3\%$ | $73\pm 0.3\%$ | $55\pm 0.8\%$ |
+[EVA02](https://arxiv.org/abs/2303.11331) | [L/14-336](https://github.com/mlfoundations/open_clip) | $93\pm 0.3\%$ | $93\pm 0.3\%$ | $94\pm 0.6\%$ | $94\pm 0.6\%$| $98\pm 0.3\%$ | $97\pm 0.4\%$ | $93\pm 0.3\%$ | $93\pm 0.3\%$ | $86\pm 0.4\%$ | $89\pm 0.3\%$ | $61\pm 0.3\%$ | $54\pm 0.5\%$ | $55\pm 0.0\%$ | $14\pm 0.0\%$ | $75\pm 0.1\%$ | $55\pm 0.7\%$ |
+[LLaVA](https://llava-vl.github.io/) | [Mistral-7b](https://huggingface.co/llava-hf/llava-v1.6-mistral-7b-hf) | $92\pm 0.5\%$ | $93\pm 0.5\%$ | $94\pm 0.5\%$ | $94\pm 0.5\%$| **$98\pm 0.5\%$** | $97\pm 0.6\%$ | $92\pm 0.5\%$ | $93\pm 0.5\%$   | $86\pm 0.7\%$ | $89\pm 0.6\%$ | $62\pm 0.3\%$ | $56\pm 0.5\%$ | $68\pm 2.8\%$ | $50\pm 2.4\%$ | $76\pm 0.1\%$ | $61\pm 0.6\%$ |
+| | [Vicuna-13B](https://huggingface.co/liuhaotian/llava-v1.6-vicuna-13b) | $92\pm 0.3\%$ | $93\pm 0.2\%$ | $93\pm 0.8\%$ | $93\pm 0.8\%$| $96\pm 0.5\%$ | $95\pm 0.6\%$ | $92\pm 0.3\%$ | $93\pm 0.2\%$   | $86\pm 1.2\%$ | $89\pm 1.0\%$ | $62\pm 0.2\%$ | $57\pm 0.4\%$ | $67\pm 2.1\%$ | $49\pm 2.2\%$ | $77\pm 0.2\%$ | $62\pm 0.7\%$ |
+[LLM2CLIP](https://arxiv.org/abs/2411.04997) | [L/14-336](https://huggingface.co/microsoft/LLM2CLIP-Openai-L-14-336) | **$94\pm 0.3\%$** | **$95\pm 0.3\%$** | $94\pm 0.4\%$ | $94\pm 0.4\%$| $97\pm 0.3\%$ | $96\pm 0.4\%$ | **$94\pm 0.3\%$**| **$95\pm 0.3\%$**   | $88\pm 0.8\%$ | $91\pm 0.6\%$ | $63\pm 0.3\%$ | $57\pm 0.5\%$ | **$71\pm 1.6\%$** | $55\pm 2.5\%$ | $76\pm 0.2\%$ | $61\pm 0.5\%$ |
+**non VLMs** |  |  |  |  |  | |
+[VGG16](https://arxiv.org/abs/1409.1556) | [VGG16](https://pytorch.org/vision/main/models/generated/torchvision.models.vgg16.html) | $83\pm 1.1\%$ | $83\pm 1.2\%$ | $88\pm 0.2\%$ | $88\pm 0.2\%$| $94\pm 0.3\%$ | $93\pm 0.5\%$ | $83\pm 1.1\%$ | $83\pm 1.2\%$   | $84\pm 0.8\%$ | $87\pm 0.7\%$ | $44\pm 0.3\%$ | $37\pm 0.2\%$ | $56\pm 1.4\%$ | $27\pm 0.9\%$ | $63\pm 0.2\%$ | $34\pm 0.9\%$ |
+[ResNet50](https://arxiv.org/abs/1512.03385) | [ResNet50](https://pytorch.org/vision/main/models/generated/torchvision.models.resnet50.html) | $85\pm 0.9\%$ | $85\pm 1.1\%$ | $91\pm 0.3\%$ | $91\pm 0.3\%$| $97\pm 0.3\%$ | $96\pm 0.4\%$ | $85\pm 0.9\%$ | $85\pm 1.1\%$   | $84\pm 0.8\%$ | $87\pm 0.7\%$ | $48\pm 0.2\%$ | $43\pm 0.1\%$ | $48\pm 1.6\%$ | $30\pm 1.8\%$ | $67\pm 0.4\%$ | $47\pm 1.0\%$ |
+[ViT-L/16](https://arxiv.org/abs/2010.11929) | [ViT-L/16](https://pytorch.org/vision/main/models/generated/torchvision.models.vit_l_16.html) | $89\pm 0.8\%$ | $89\pm 0.8\%$ | $92\pm 0.5\%$ | $92\pm 0.5\%$| $98\pm 0.2\%$ | $97\pm 0.3\%$ | $89\pm 0.8\%$ | $89\pm 0.8\%$   | $85\pm 0.8\%$ | $88\pm 0.6\%$ | $52\pm 0.2\%$ | $47\pm 0.3\%$ | $47\pm 1.3\%$ | $28\pm 1.9\%$ | $69\pm 0.3\%$ | $51\pm 0.6\%$ |
+
+
+## Survey results
 ### Dataset about image classification across various modalities
 |dataset name|dataset portal|task|modality|DOI of dataset|remarks|
 |:-|:-|:-|:-|:-|:-|
